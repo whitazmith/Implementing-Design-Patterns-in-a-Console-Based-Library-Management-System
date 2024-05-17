@@ -21,6 +21,9 @@ public abstract class User{
     this.tags = tags;
   }
   public abstract void displayInfo();
+  public Object getPassword() {
+    return null;
+  }
 }
 class Student extends User{
   public Student(String name, String phoneNum){
