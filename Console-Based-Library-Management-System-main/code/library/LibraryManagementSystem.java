@@ -3,6 +3,7 @@ package library;
 import java.util.Scanner;
 import java.util.List;
 import java.util.Arrays;
+import java.io.Console;
 
 public class LibraryManagementSystem {
     private static final String ADMIN_USERNAME = "admin";
@@ -67,128 +68,134 @@ public class LibraryManagementSystem {
         String greenColorStart = "\u001B[32m";
         String resetGreenColor = "\u001B[0m";
         while (!authenticated) {
-            System.out.print(boldTextStart +"\033[0;33mEnter admin username:  \033[0m"+ boldTextEnd);
+            System.out.print(boldTextStart + "\u001b[0;33mEnter admin username:  \u001b[0m" + boldTextEnd);
             String username = scanner.nextLine();
-            System.out.print(boldTextStart +"\033[0;33mEnter admin password:  \033[0m"+ boldTextEnd);
+            System.out.print(boldTextStart + "\u001b[0;33mEnter admin password:  \u001b[0m" + boldTextEnd);
             String password = scanner.nextLine();
-
             if (admin.authenticate(username, password)) {
                 authenticated = true;
-                System.out.println(greenColorStart +"Admin login successful."+ resetGreenColor);
+                System.out.println(greenColorStart + "Admin login successful." + resetGreenColor);
             } else {
-                System.out.println(redColorStart +"Admin login failed: Invalid username or password. Please try again."+ resetColor);
-            }
-        }
-
-            while (true) {
-                System.out.println(boldTextStart +"=============================================="+ boldTextEnd);
-                System.out.println(boldTextStart +"Admin Mode"+ boldTextEnd);
-                System.out.println(boldTextStart +"=============================================="+ boldTextEnd);
-                System.out.println(boldTextStart +"1. Modify user account information"+ boldTextEnd);
-                System.out.println(boldTextStart +"2. Add book"+ boldTextEnd);
-                System.out.println(boldTextStart +"3. Remove book"+ boldTextEnd);
-                System.out.println(boldTextStart +"4. Add ISBN"+ boldTextEnd);
-                System.out.println(boldTextStart +"5. Add new Administrator"+ boldTextEnd);
-                System.out.println(boldTextStart +"6. Add tags"+ boldTextEnd);
-                System.out.println(boldTextStart +"7. Exit admin mode"+ boldTextEnd);
-                System.out.print(boldTextStart +"\033[0;33mEnter your choice:  \033[0m"+ boldTextEnd);
-                int choice = scanner.nextInt();
-                scanner.nextLine();
-                switch (choice) {
-                    case 1:
-                        // Modify user account information
-                        System.out.print(boldTextStart +"\033[0;33mEnter username to modify: \033[0m"+ boldTextEnd);
-                        String modifyUsername = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter new phone number: \033[0m"+ boldTextEnd);
-                        String newPhoneNum = scanner.nextLine();
-                        if (admin.modifyUserInfo(modifyUsername, newPhoneNum)) {
-                            System.out.println(greenColorStart +"User account information modified successfully."+ resetGreenColor);
-                        } else {
-                            System.out.println(redColorStart +"Failed to modify user account information: User not found."+ resetColor);
-                        }
-                        break;
-                    case 2:
-                        // Add book
-                        System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database: \033[0m"+ boldTextEnd);
-                        dbConnection.displayBooks();
-                        System.out.print(boldTextStart +"\033[0;33mEnter book title:  \033[0m"+ boldTextEnd);
-                        String title = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter author name:  \033[0m"+ boldTextEnd);
-                        String author = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter publication date:  \033[0m"+ boldTextEnd);
-                        String publicationDate = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter ISBN:  \033[0m"+ boldTextEnd);
-                        String isbn = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter tags (comma-separated):  \033[0m"+ boldTextEnd);
-                        String tagsInput = scanner.nextLine();
-                        List<String> tags = Arrays.asList(tagsInput.split(","));
-                        if (admin.addBook(title, author, publicationDate, isbn, tags)) {
-                            System.out.println(greenColorStart +"Book added successfully."+ resetGreenColor);
-                        } else {
-                            System.out.println(redColorStart +"Failed to add book."+ resetColor);
-                        }
-                        break;
-                    case 3:
-                        // Remove book
-                        System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database:\033[0m"+ boldTextEnd);
-                        dbConnection.displayBooks();
-                        System.out.print(boldTextStart +"\033[0;33mEnter book title to remove: \033[0m"+ boldTextEnd);
-                        String removeTitle = scanner.nextLine();
-                        if (admin.removeBook(removeTitle)) {
-                            System.out.println(greenColorStart +"Book removed successfully."+ resetGreenColor);
-                        } else {
-                            System.out.println(redColorStart +"Book not found."+ resetColor);
-                        }
-                        break;
-                    case 4:
-                        // Add ISBN
-                        System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database: \033[0m"+ boldTextEnd);
-                        dbConnection.displayBooks();
-                        System.out.print(boldTextStart +"\033[0;33mEnter book title: \033[0m"+ boldTextEnd);
-                        String isbnTitle = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter ISBN: \033[0m"+ boldTextEnd);
-                        String newIsbn = scanner.nextLine();
-                        if (admin.addISBN(isbnTitle, newIsbn)) {
-                            System.out.println(greenColorStart +"ISBN added successfully."+ resetGreenColor);
-                        } else {
-                            System.out.println(redColorStart +"Failed to add ISBN: Book not found."+ resetColor);
-                        }
-                        break;
-                    case 5:
-                        // Register new admin
-                        System.out.print(boldTextStart +"\033[0;33mEnter new admin username: \033[0m"+ boldTextEnd);
-                        String newAdminUsername = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter new admin password: \033[0m"+ boldTextEnd);
-                        String newAdminPassword = scanner.nextLine();
-                        if (admin.registerAdmin(newAdminUsername, newAdminPassword)) {
-                            System.out.println(greenColorStart +"Admin registered successfully."+ resetGreenColor);
-                        } else {
-                            System.out.println(redColorStart +"Failed to register admin: Admin already exists."+ resetColor);
-                        }
-                        break;
-                    case 6:
-                        System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database:\033[0m"+ boldTextEnd);
-                        dbConnection.displayBooks();
-                        System.out.print(boldTextStart +"\033[0;33mEnter book title: \033[0m"+ boldTextEnd);
-                        String tagsTitle = scanner.nextLine();
-                        System.out.print(boldTextStart +"\033[0;33mEnter tags to add (comma-separated): \033[0m"+ boldTextEnd);
-                        String newTagsInput = scanner.nextLine();
-                        List<String> newTags = Arrays.asList(newTagsInput.split(","));
-                        if (admin.addTags(tagsTitle, newTags)) {
-                            System.out.println(greenColorStart +"Tags added successfully."+ resetGreenColor);
-                        } else {
-                            System.out.println(redColorStart +"Failed to add tags: Book not found."+ resetColor);
-                        }
-                        break;
-                    case 7:
-                        System.out.println(greenColorStart +"Exiting admin mode..."+ resetGreenColor);
-                        return;
-                    default:
-                        System.out.println(redColorStart +"Invalid choice. Please try again."+ resetColor);
-
+                System.out.println(redColorStart + "Admin login failed: Invalid username or password. " +
+                        "Please try again or enter 'exit' to return to the main menu." + resetColor);
+                System.out.print(boldTextStart + "\u001b[0;33mEnter 'exit' to return to the main menu, or press Enter to retry: " +
+                        "\u001b[0m" + boldTextEnd);
+                String exitOption = scanner.nextLine();
+                if (exitOption.equalsIgnoreCase("exit")) {
+                    return; // 退出到重新选择页面
                 }
             }
         }
+
+        while (true) {
+            System.out.println(boldTextStart +"=============================================="+ boldTextEnd);
+            System.out.println(boldTextStart +"Admin Mode"+ boldTextEnd);
+            System.out.println(boldTextStart +"=============================================="+ boldTextEnd);
+            System.out.println(boldTextStart +"1. Modify user account information"+ boldTextEnd);
+            System.out.println(boldTextStart +"2. Add book"+ boldTextEnd);
+            System.out.println(boldTextStart +"3. Remove book"+ boldTextEnd);
+            System.out.println(boldTextStart +"4. Add ISBN"+ boldTextEnd);
+            System.out.println(boldTextStart +"5. Add new Administrator"+ boldTextEnd);
+            System.out.println(boldTextStart +"6. Add tags"+ boldTextEnd);
+            System.out.println(boldTextStart +"7. Exit admin mode"+ boldTextEnd);
+            System.out.print(boldTextStart +"\033[0;33mEnter your choice:  \033[0m"+ boldTextEnd);
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice) {
+                case 1:
+                    // Modify user account information
+                    System.out.print(boldTextStart +"\033[0;33mEnter username to modify: \033[0m"+ boldTextEnd);
+                    String modifyUsername = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter new phone number: \033[0m"+ boldTextEnd);
+                    String newPhoneNum = scanner.nextLine();
+                    if (admin.modifyUserInfo(modifyUsername, newPhoneNum)) {
+                        System.out.println(greenColorStart +"User account information modified successfully."+ resetGreenColor);
+                    } else {
+                        System.out.println(redColorStart +"Failed to modify user account information: User not found."+ resetColor);
+                    }
+                    break;
+                case 2:
+                    // Add book
+                    System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database: \033[0m"+ boldTextEnd);
+                    dbConnection.displayBooks();
+                    System.out.print(boldTextStart +"\033[0;33mEnter book title:  \033[0m"+ boldTextEnd);
+                    String title = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter author name:  \033[0m"+ boldTextEnd);
+                    String author = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter publication date:  \033[0m"+ boldTextEnd);
+                    String publicationDate = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter ISBN:  \033[0m"+ boldTextEnd);
+                    String isbn = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter tags (comma-separated):  \033[0m"+ boldTextEnd);
+                    String tagsInput = scanner.nextLine();
+                    List<String> tags = Arrays.asList(tagsInput.split(","));
+                    if (admin.addBook(title, author, publicationDate, isbn, tags)) {
+                        System.out.println(greenColorStart +"Book added successfully."+ resetGreenColor);
+                    } else {
+                        System.out.println(redColorStart +"Failed to add book."+ resetColor);
+                    }
+                    break;
+                case 3:
+                    // Remove book
+                    System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database:\033[0m"+ boldTextEnd);
+                    dbConnection.displayBooks();
+                    System.out.print(boldTextStart +"\033[0;33mEnter book title to remove: \033[0m"+ boldTextEnd);
+                    String removeTitle = scanner.nextLine();
+                    if (admin.removeBook(removeTitle)) {
+                        System.out.println(greenColorStart +"Book removed successfully."+ resetGreenColor);
+                    } else {
+                        System.out.println(redColorStart +"Book not found."+ resetColor);
+                    }
+                    break;
+                case 4:
+                    // Add ISBN
+                    System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database: \033[0m"+ boldTextEnd);
+                    dbConnection.displayBooks();
+                    System.out.print(boldTextStart +"\033[0;33mEnter book title: \033[0m"+ boldTextEnd);
+                    String isbnTitle = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter ISBN: \033[0m"+ boldTextEnd);
+                    String newIsbn = scanner.nextLine();
+                    if (admin.addISBN(isbnTitle, newIsbn)) {
+                        System.out.println(greenColorStart +"ISBN added successfully."+ resetGreenColor);
+                    } else {
+                        System.out.println(redColorStart +"Failed to add ISBN: Book not found."+ resetColor);
+                    }
+                    break;
+                case 5:
+                    // Register new admin
+                    System.out.print(boldTextStart +"\033[0;33mEnter new admin username: \033[0m"+ boldTextEnd);
+                    String newAdminUsername = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter new admin password: \033[0m"+ boldTextEnd);
+                    String newAdminPassword = scanner.nextLine();
+                    if (admin.registerAdmin(newAdminUsername, newAdminPassword)) {
+                        System.out.println(greenColorStart +"Admin registered successfully."+ resetGreenColor);
+                    } else {
+                        System.out.println(redColorStart +"Failed to register admin: Admin already exists."+ resetColor);
+                    }
+                    break;
+                case 6:
+                    System.out.println(boldTextStart +"\033[0;33mCurrent Books in Database:\033[0m"+ boldTextEnd);
+                    dbConnection.displayBooks();
+                    System.out.print(boldTextStart +"\033[0;33mEnter book title: \033[0m"+ boldTextEnd);
+                    String tagsTitle = scanner.nextLine();
+                    System.out.print(boldTextStart +"\033[0;33mEnter tags to add (comma-separated): \033[0m"+ boldTextEnd);
+                    String newTagsInput = scanner.nextLine();
+                    List<String> newTags = Arrays.asList(newTagsInput.split(","));
+                    if (admin.addTags(tagsTitle, newTags)) {
+                        System.out.println(greenColorStart +"Tags added successfully."+ resetGreenColor);
+                    } else {
+                        System.out.println(redColorStart +"Failed to add tags: Book not found."+ resetColor);
+                    }
+                    break;
+                case 7:
+                    System.out.println(greenColorStart +"Exiting admin mode..."+ resetGreenColor);
+                    return;
+                default:
+                    System.out.println(redColorStart +"Invalid choice. Please try again."+ resetColor);
+
+            }
+        }
+    }
 
     private static void registerUser(Scanner scanner, DatabaseConnection dbConnection) {
         String redColorStart = "\u001B[31m";
@@ -229,22 +236,34 @@ public class LibraryManagementSystem {
         String greenColorStart = "\u001B[32m";
         String resetGreenColor = "\u001B[0m";
 
-        System.out.print(boldTextStart +"\033[0;33mEnter user name for login: \033[0m"+ boldTextEnd);
-        String userName = scanner.nextLine();
+        boolean loggedIn = false;
 
-        System.out.print(boldTextStart +"\033[0;33mEnter Pasword: \033[0m"+ boldTextEnd);
-        String phoneNum = scanner.nextLine().replace("-", "").replace(" ", "");
+        while (!loggedIn) {
+            System.out.print(boldTextStart + "\033[0;33mEnter user name for login: \033[0m" + boldTextEnd);
+            String userName = scanner.nextLine();
 
-        User user = dbConnection.getUser(userName);
+            System.out.print(boldTextStart + "\033[0;33mEnter Password: \033[0m" + boldTextEnd);
+            String password = scanner.nextLine(); // 直接从控制台获取密码
 
-        if (user != null && user.getPhoneNum().equals(phoneNum)) {
-            System.out.println(greenColorStart +"Login successful:"+ resetGreenColor);
-            user.displayInfo();
-            manageBooks(scanner, dbConnection, user);
-        } else {
-            System.out.println(redColorStart +"Login failed: User not found or phone number does not match."+ resetColor);
+            User user = dbConnection.getUser(userName);
+
+            if (user != null && user.getPassword().equals(password)) {
+                loggedIn = true;
+                System.out.println(greenColorStart + "Login successful:" + resetGreenColor);
+                user.displayInfo();
+                manageBooks(scanner, dbConnection, user);
+            } else {
+                System.out.println(redColorStart + "Login failed: User not found or password does not match. Please try again or enter 'exit' to return to the main menu." + resetColor);
+                System.out.print(boldTextStart + "\033[0;33mEnter 'exit' to return to the main menu, or press Enter to retry: \033[0m" + boldTextEnd);
+                String exitOption = scanner.nextLine();
+                if (exitOption.equalsIgnoreCase("exit")) {
+                    return; // 退出到重新选择页面
+                }
+            }
         }
     }
+
+
 
     private static void manageBooks(Scanner scanner, DatabaseConnection dbConnection, User user) {
         String redColorStart = "\u001B[31m";
