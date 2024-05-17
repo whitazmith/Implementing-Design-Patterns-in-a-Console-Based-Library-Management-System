@@ -132,7 +132,7 @@ public class LibraryManagementSystem {
                     if (admin.addBook(title, author, publicationDate, isbn, tags)) {
                         System.out.println(greenColorStart +"Book added successfully."+ resetGreenColor);
                     } else {
-                        System.out.println(redColorStart +"Failed to add book."+ resetColor);
+                        System.out.println(redColorStart +"Failed to add books."+ resetColor);
                     }
                     break;
                 case 3:
